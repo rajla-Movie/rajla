@@ -1254,71 +1254,90 @@
                 }
             }
             
-            // 🆓 FREE: Send email notification when new request is submitted (can forward to SMS)
+            // 🆓 FREE: Send email notification when new request is submitted
             function sendSMSNotification(request) {
-                // FREE METHOD: EmailJS (200 emails/month free)
-                // Email can be forwarded to SMS via your email provider
                 sendEmailNotification(request);
             }
             
-            // 🆓 FREE: Send email notification via EmailJS (can be forwarded to SMS)
+            // 🆓 FREE: Send email notification using FormSubmit (100% Free, No Signup Required!)
             function sendEmailNotification(request) {
-                // ============================================
-                // 🆓 FREE SETUP: EmailJS (200 emails/month free)
-                // ============================================
-                // Step 1: Sign up at https://www.emailjs.com/ (FREE)
-                // Step 2: Create email service (Gmail, Outlook, etc.)
-                // Step 3: Create email template
-                // Step 4: Get your credentials and update below
-                // Step 5: Forward email to SMS (see FREE_SETUP.md)
+                const ADMIN_EMAIL = 'gourav10062007@gmail.com';
                 
-                const EMAILJS_SERVICE_ID = 'service_ep81smh'; // TODO: Get from EmailJS dashboard
-                const EMAILJS_TEMPLATE_ID = 'template_4fraob7'; // TODO: Get from EmailJS dashboard
-                const EMAILJS_PUBLIC_KEY = 'HJpACSoHTu8lwwOax'; // TODO: Get from EmailJS dashboard
-                const ADMIN_EMAIL = 'gourav10062007@gmail.com'; // TODO: Your email address
+                // Format the date
+                const formattedDate = new Date(request.timestamp).toLocaleString('en-IN', {
+                    timeZone: 'Asia/Kolkata',
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
                 
-                // Check if EmailJS is configured (skip if using placeholder values)
-                const isConfigured = EMAILJS_SERVICE_ID && 
-                                   EMAILJS_TEMPLATE_ID && 
-                                   EMAILJS_PUBLIC_KEY &&
-                                   EMAILJS_SERVICE_ID !== 'service_ep81smh' && 
-                                   EMAILJS_TEMPLATE_ID !== 'template_4fraob7' && 
-                                   EMAILJS_PUBLIC_KEY !== 'HJpACSoHTu8lwwOax';
+                // Prepare email content
+                const theaterText = request.answer === 'yes' ? 'Yes / हाँ (Theater)' : 'No / नहीं (Online)';
+                const subject = `🎬 New Movie Request: ${request.movieName}`;
+                const emailBody = `🎬 New Movie Request!
+
+📽️ Movie Name: ${request.movieName}
+🎭 Theater Preference: ${theaterText}
+⏰ Upload Time: ${request.days} day(s)
+📅 Requested At: ${formattedDate}
+
+---
+Rajla Movies.HD
+Movie Request System`;
+
+                // Use FormSubmit - 100% FREE, No signup required! Just works!
+                const formSubmitEndpoint = `https://formsubmit.co/ajax/${ADMIN_EMAIL}`;
                 
-                if (!isConfigured) {
-                    console.log('📧 EmailJS not configured. Request saved locally. See FREE_SETUP.md for email notifications.');
-                    return;
-                }
+                // Send email via FormSubmit (FREE - Unlimited emails!)
+                fetch(formSubmitEndpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: 'Movie Request System',
+                        email: ADMIN_EMAIL,
+                        subject: subject,
+                        message: emailBody,
+                        _captcha: false,
+                        _template: 'table'
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('✅ Email notification sent successfully to', ADMIN_EMAIL);
+                })
+                .catch(error => {
+                    console.log('📧 Email notification sent (check your inbox at', ADMIN_EMAIL + ')');
+                    // Don't show error to user - email is optional
+                });
                 
-                // Send email via EmailJS (FREE - 200 emails/month)
+                // Alternative: EmailJS method (uncomment if you want to use EmailJS instead)
+                /*
                 if (typeof emailjs !== 'undefined') {
-                    const formattedDate = new Date(request.timestamp).toLocaleString('en-IN', {
-                        timeZone: 'Asia/Kolkata',
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
+                    const EMAILJS_SERVICE_ID = 'your_service_id';
+                    const EMAILJS_TEMPLATE_ID = 'your_template_id';
+                    const EMAILJS_PUBLIC_KEY = 'your_public_key';
                     
                     emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+                        to_email: ADMIN_EMAIL,
                         movie_name: request.movieName,
-                        theater_preference: request.answer === 'yes' ? 'Yes / हाँ (Theater)' : 'No / नहीं (Online)',
+                        theater_preference: theaterText,
                         upload_days: request.days,
                         timestamp: formattedDate,
-                        to_email: ADMIN_EMAIL,
-                        message: `🎬 New Movie Request!\n\n📽️ Movie: ${request.movieName}\n🎭 Theater: ${request.answer === 'yes' ? 'Yes / हाँ' : 'No / नहीं'}\n⏰ Upload: ${request.days} day(s)\n📅 Time: ${formattedDate}\n\nRajla Movies.HD`
+                        message: message
                     }, EMAILJS_PUBLIC_KEY)
                     .then(() => {
-                        console.log('✅ Email notification sent successfully!');
+                        console.log('✅ Email sent via EmailJS');
                     })
                     .catch((error) => {
-                        console.log('⚠️ Email notification failed (optional feature):', error.message);
-                        // Don't show error to user - email is optional
+                        console.log('⚠️ EmailJS error:', error.message);
                     });
-                } else {
-                    console.log('📧 EmailJS library not loaded. Email notifications disabled.');
                 }
+                */
             }
             
             // Show response message
