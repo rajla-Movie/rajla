@@ -162,7 +162,7 @@
                                 const localRequests = JSON.parse(localStorage.getItem('movieRequests') || '[]');
                                 callback(localRequests);
                             }
-                        }, 2000); // 2 second timeout
+                        }, 3000); // 3 second timeout
                         
                         // Try to load from Firebase first
                         database.ref('movieRequests').once('value')
@@ -172,14 +172,21 @@
                                 callbackCalled = true;
                                 
                                 const requests = snapshot.val();
-                                if (requests && Array.isArray(requests) && requests.length > 0) {
+                                // Always use Firebase data if it exists (even if empty array)
+                                if (requests !== null && Array.isArray(requests)) {
                                     // Save to localStorage for offline access
                                     localStorage.setItem('movieRequests', JSON.stringify(requests));
+                                    console.log('Loaded requests from Firebase:', requests.length);
                                     callback(requests);
+                                } else if (requests === null) {
+                                    // Firebase has no data, use empty array
+                                    localStorage.setItem('movieRequests', '[]');
+                                    callback([]);
                                 } else {
-                                    // Fallback to localStorage
-                                    const localRequests = JSON.parse(localStorage.getItem('movieRequests') || '[]');
-                                    callback(localRequests);
+                                    // Invalid data format, use empty array
+                                    console.warn('Invalid requests format in Firebase, using empty array');
+                                    localStorage.setItem('movieRequests', '[]');
+                                    callback([]);
                                 }
                             })
                             .catch((error) => {
@@ -210,11 +217,20 @@
                 if (database) {
                     database.ref('movieRequests').on('value', (snapshot) => {
                         const requests = snapshot.val();
-                        if (requests && Array.isArray(requests)) {
+                        // Handle null, empty array, or valid array
+                        if (requests === null) {
+                            localStorage.setItem('movieRequests', '[]');
+                            callback([]);
+                        } else if (Array.isArray(requests)) {
                             // Update localStorage
                             localStorage.setItem('movieRequests', JSON.stringify(requests));
+                            console.log('Real-time update: requests changed, count:', requests.length);
                             callback(requests);
+                        } else {
+                            console.warn('Invalid requests format in Firebase real-time update');
                         }
+                    }, (error) => {
+                        console.error('Error in real-time requests listener:', error);
                     });
                 }
             }
@@ -471,7 +487,27 @@
             document.getElementById('login-page').style.display = 'none';
             document.getElementById('admin-dashboard').style.display = 'block';
             loadMovies();
+            // Load requests immediately and set up real-time listener
             loadRequests();
+            // Set up real-time listener for requests (will update automatically)
+            setupRequestsListener();
+        }
+        
+        // Set up real-time listener for requests
+        function setupRequestsListener() {
+            try {
+                RequestStorage.onRequestsChange(function(requests) {
+                    console.log('Real-time request update received:', requests ? requests.length : 0);
+                    const requestsList = document.getElementById('requests-list');
+                    const badge = document.getElementById('request-badge');
+                    
+                    if (requestsList) {
+                        displayRequests(requests || [], requestsList, badge);
+                    }
+                });
+            } catch(error) {
+                console.error('Error setting up real-time requests listener:', error);
+            }
         }
 
         function handleLogin(e) {
@@ -704,6 +740,11 @@
             const requestsList = document.getElementById('requests-list');
             const badge = document.getElementById('request-badge');
             
+            if (!requestsList) {
+                console.error('Requests list element not found');
+                return;
+            }
+            
             // Show loading state
             requestsList.innerHTML = `
                 <div class="loading-state">
@@ -712,80 +753,91 @@
                 </div>
             `;
             
-            // Function to display requests
-            function displayRequests(requests) {
-                // Update badge
-                const pendingCount = requests.filter(r => r.status === 'pending').length;
-                badge.textContent = pendingCount;
-                badge.style.display = pendingCount > 0 ? 'inline-block' : 'none';
-
-                if (requests.length === 0) {
-                    requestsList.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-bell-slash"></i>
-                            <p>No movie requests yet.</p>
-                        </div>
-                    `;
-                    return;
-                }
-
-                // Sort by newest first
-                const sortedRequests = requests.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-
-                requestsList.innerHTML = sortedRequests.map(request => {
-                    const date = new Date(request.timestamp);
-                    const formattedDate = date.toLocaleString();
-                    const statusClass = request.status === 'pending' ? 'pending' : 'completed';
-                    
-                    return `
-                        <div class="request-card ${statusClass}" data-id="${request.id}">
-                            <div class="request-header">
-                                <div class="request-title">
-                                    <i class="fas fa-film"></i>
-                                    <h3>${request.movieName}</h3>
-                                </div>
-                                <span class="request-status ${statusClass}">${request.status}</span>
-                            </div>
-                            <div class="request-details">
-                                <p><i class="fas fa-calendar"></i> <strong>Requested:</strong> ${formattedDate}</p>
-                                <p><i class="fas fa-theater-masks"></i> <strong>Theater:</strong> ${request.answer === 'yes' ? 'Yes / हाँ' : 'No / नहीं'}</p>
-                                <p><i class="fas fa-clock"></i> <strong>Upload Time:</strong> ${request.days} day${request.days > 1 ? 's' : ''}</p>
-                            </div>
-                            <div class="request-actions">
-                                ${request.status === 'pending' ? `
-                                    <button class="mark-complete-btn" onclick="markRequestComplete(${request.id})">
-                                        <i class="fas fa-check"></i> Mark as Complete
-                                    </button>
-                                ` : ''}
-                                <button class="delete-request-btn" onclick="deleteRequest(${request.id})">
-                                    <i class="fas fa-trash"></i> Delete
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            }
-            
             // Load from Firebase or localStorage
             try {
                 RequestStorage.loadRequests(function(requests) {
-                    displayRequests(requests);
+                    console.log('Loaded requests from storage:', requests.length);
+                    displayRequests(requests, requestsList, badge);
                 });
             } catch(error) {
                 console.error('Error loading requests:', error);
                 // Fallback to localStorage only
                 const localRequests = JSON.parse(localStorage.getItem('movieRequests') || '[]');
-                displayRequests(localRequests);
+                displayRequests(localRequests, requestsList, badge);
+            }
+        }
+        
+        // Make displayRequests available globally for real-time updates
+        function displayRequests(requests, targetList, targetBadge) {
+            const list = targetList || document.getElementById('requests-list');
+            const badge = targetBadge || document.getElementById('request-badge');
+            
+            if (!list) {
+                console.error('Requests list element not found');
+                return;
             }
             
-            // Listen for real-time updates from Firebase
-            try {
-                RequestStorage.onRequestsChange(function(requests) {
-                    displayRequests(requests);
-                });
-            } catch(error) {
-                console.error('Error setting up real-time listener:', error);
+            // Ensure requests is an array
+            if (!Array.isArray(requests)) {
+                requests = [];
             }
+            
+            // Update badge
+            const pendingCount = requests.filter(r => r.status === 'pending').length;
+            if (badge) {
+                badge.textContent = pendingCount;
+                badge.style.display = pendingCount > 0 ? 'inline-block' : 'none';
+            }
+
+            if (requests.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-bell-slash"></i>
+                        <p>No movie requests yet.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Sort by newest first
+            const sortedRequests = requests.sort((a, b) => {
+                const dateA = new Date(a.timestamp || 0);
+                const dateB = new Date(b.timestamp || 0);
+                return dateB - dateA;
+            });
+
+            list.innerHTML = sortedRequests.map(request => {
+                const date = new Date(request.timestamp);
+                const formattedDate = date.toLocaleString();
+                const statusClass = request.status === 'pending' ? 'pending' : 'completed';
+                
+                return `
+                    <div class="request-card ${statusClass}" data-id="${request.id}">
+                        <div class="request-header">
+                            <div class="request-title">
+                                <i class="fas fa-film"></i>
+                                <h3>${request.movieName}</h3>
+                            </div>
+                            <span class="request-status ${statusClass}">${request.status}</span>
+                        </div>
+                        <div class="request-details">
+                            <p><i class="fas fa-calendar"></i> <strong>Requested:</strong> ${formattedDate}</p>
+                            <p><i class="fas fa-theater-masks"></i> <strong>Theater:</strong> ${request.answer === 'yes' ? 'Yes / हाँ' : 'No / नहीं'}</p>
+                            <p><i class="fas fa-clock"></i> <strong>Upload Time:</strong> ${request.days} day${request.days > 1 ? 's' : ''}</p>
+                        </div>
+                        <div class="request-actions">
+                            ${request.status === 'pending' ? `
+                                <button class="mark-complete-btn" onclick="markRequestComplete(${request.id})">
+                                    <i class="fas fa-check"></i> Mark as Complete
+                                </button>
+                            ` : ''}
+                            <button class="delete-request-btn" onclick="deleteRequest(${request.id})">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
 
         function markRequestComplete(id) {
