@@ -40,7 +40,7 @@
     
     <!--==Fav-icon===============================-->
     <link rel="shortcut icon" href="Images/fav-icon.png" type="image/png"/>
-    <link rel="canonical" href="https://rajla.netlify.app/">
+    <link rel="canonical" href="https://rajla-movie.github.io/rajla/">
     
     <!-- Structured Data for SEO -->
     <script type="application/ld+json">
@@ -48,11 +48,11 @@
       "@context": "https://schema.org",
       "@type": "WebSite",
       "name": "Rajla Movies.HD",
-      "url": "https://rajla.netlify.app/",
+      "url": "https://rajla-movie.github.io/rajla/",
       "description": "Watch latest Bollywood and Hollywood movies in HD quality. Premium movie streaming platform.",
       "potentialAction": {
         "@type": "SearchAction",
-        "target": "https://rajla.netlify.app/?search={search_term_string}",
+        "target": "https://rajla-movie.github.io/rajla/?search={search_term_string}",
         "query-input": "required name=search_term_string"
       }
     }
@@ -62,8 +62,8 @@
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "Rajla Movies.HD",
-      "url": "https://rajla.netlify.app/",
-      "logo": "https://rajla.netlify.app//Images/fav-icon.png"
+      "url": "https://rajla-movie.github.io/rajla/",
+      "logo": "https://rajla-movie.github.io/rajla/Images/fav-icon.png"
     }
     </script>
 </head>
@@ -479,7 +479,7 @@
                                 const localRequests = JSON.parse(localStorage.getItem('movieRequests') || '[]');
                                 callback(localRequests);
                             }
-                        }, 2000); // 2 second timeout
+                        }, 3000); // 3 second timeout
                         
                         // Try to load from Firebase first
                         database.ref('movieRequests').once('value')
@@ -489,14 +489,20 @@
                                 callbackCalled = true;
                                 
                                 const requests = snapshot.val();
-                                if (requests && Array.isArray(requests) && requests.length > 0) {
+                                // Always use Firebase data if it exists (even if empty array)
+                                if (requests !== null && Array.isArray(requests)) {
                                     // Save to localStorage for offline access
                                     localStorage.setItem('movieRequests', JSON.stringify(requests));
                                     callback(requests);
+                                } else if (requests === null) {
+                                    // Firebase has no data, use empty array
+                                    localStorage.setItem('movieRequests', '[]');
+                                    callback([]);
                                 } else {
-                                    // Fallback to localStorage
-                                    const localRequests = JSON.parse(localStorage.getItem('movieRequests') || '[]');
-                                    callback(localRequests);
+                                    // Invalid data format, use empty array
+                                    console.warn('Invalid requests format in Firebase, using empty array');
+                                    localStorage.setItem('movieRequests', '[]');
+                                    callback([]);
                                 }
                             })
                             .catch((error) => {
@@ -527,11 +533,19 @@
                 if (database) {
                     database.ref('movieRequests').on('value', (snapshot) => {
                         const requests = snapshot.val();
-                        if (requests && Array.isArray(requests)) {
+                        // Handle null, empty array, or valid array
+                        if (requests === null) {
+                            localStorage.setItem('movieRequests', '[]');
+                            callback([]);
+                        } else if (Array.isArray(requests)) {
                             // Update localStorage
                             localStorage.setItem('movieRequests', JSON.stringify(requests));
                             callback(requests);
+                        } else {
+                            console.warn('Invalid requests format in Firebase real-time update');
                         }
+                    }, (error) => {
+                        console.error('Error in real-time requests listener:', error);
                     });
                 }
             }
@@ -1202,6 +1216,11 @@
                 try {
                     // Load existing requests and add new one
                     RequestStorage.loadRequests(function(requests) {
+                        // Ensure requests is an array
+                        if (!Array.isArray(requests)) {
+                            requests = [];
+                        }
+                        
                         const newRequest = {
                             id: Date.now(),
                             movieName: movieName,
@@ -1211,8 +1230,12 @@
                             status: 'pending'
                         };
                         requests.push(newRequest);
+                        
                         // Save to Firebase and localStorage (syncs across all devices)
                         RequestStorage.saveRequests(requests);
+                        
+                        console.log('Movie request saved:', newRequest);
+                        console.log('Total requests:', requests.length);
                         
                         // Send FREE email notification (can forward to SMS) - optional
                         try {
@@ -1333,6 +1356,4 @@
 </body>
 </html>
   
-
   
-
