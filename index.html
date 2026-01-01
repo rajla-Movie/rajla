@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="google-site-verification" content="SZgD5ze6D20lMh6plvSQSgTYhMHQb9LJTV3QiabhXN4" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Rajla Movies.HD - Watch latest Bollywood and Hollywood movies in HD quality. Premium movie streaming platform. Free HD movies online, latest Hindi movies, Hollywood movies streaming.">
+    <meta name="keywords" content="movies, bollywood, hollywood, streaming, HD movies, watch movies online, free movies, hindi movies, latest movies, movie streaming, online movies, watch free movies, HD streaming, bollywood movies 2024, hollywood movies 2024">
+    <meta name="author" content="Gourav Sharma">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English, Hindi">
+    <meta name="revisit-after" content="7 days">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://rajla.netlify.app/">
+    <meta property="og:title" content="Rajla Movies.HD - Watch Latest Movies Online">
+    <meta property="og:description" content="Watch latest Bollywood and Hollywood movies in HD quality. Premium movie streaming platform.">
+    <meta property="og:image" content="https://rajla.netlify.app/Images/fav-icon.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://rajla.netlify.app/">
+    <meta property="twitter:title" content="Rajla Movies.HD - Watch Latest Movies Online">
+    <meta property="twitter:description" content="Watch latest Bollywood and Hollywood movies in HD quality. Premium movie streaming platform.">
+    <meta property="twitter:image" content="https://rajla.netlify.app//Images/fav-icon.png">
+    
+    <!--==Title==================================-->
+    <title>Rajla Movies.HD - Watch Latest Movies Online | Free HD Movies Streaming</title>
+    
+    <!--==Font Awesome CDN==========================-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!--==Swiper CSS CDN==========================-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    
+    <!--Stylesheet(CSS)==========================-->
+    <link rel="stylesheet" href="style.css"/>
+    
+    <!--==Fav-icon===============================-->
+    <link rel="shortcut icon" href="Images/fav-icon.png" type="image/png"/>
+    <link rel="canonical" href="https://rajla.netlify.app/">
+    
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Rajla Movies.HD",
+      "url": "https://rajla.netlify.app/",
+      "description": "Watch latest Bollywood and Hollywood movies in HD quality. Premium movie streaming platform.",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://rajla.netlify.app/?search={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Rajla Movies.HD",
+      "url": "https://rajla.netlify.app/",
+      "logo": "https://rajla.netlify.app//Images/fav-icon.png"
+    }
+    </script>
+</head>
+
+
+
+
+<body>
+
+    <!--==Scroll-Progress-bar=========================-->
+    
+
+    <!--==Navigation===================================-->
+    <nav class="navigation" role="navigation" aria-label="Main navigation">
+        <!--menu-btn--------------->
+        <input type="checkbox" class="menu-btn" id="menu-btn" aria-label="Toggle menu">
+        
+        
+        <!--menu------------------->
+        <ul class="menu" role="menu">
+            <li role="menuitem"><a href="#main-slider">Home</a></li>
+            <li role="menuitem"><a href="#latest">Premium Movies</a></li>
+            <li role="menuitem"><a href="#main-slider">Bollywood</a></li>
+            <li role="menuitem"><a href="#main-slider">Hollywood</a></li>
+        </ul>
+        
+        <!--logo------------------->
+        <a href="#" class="logo" aria-label="Rajla Movies Home">
+           Rajla <span></span>
+        </a>
+        
+
+
+
+
+
+        <!--Search-box------------->
+        <form action="" method="get" class="search-box" role="search" aria-label="Search movies">
+            <!--input-->
+            <input type="text" name="search" placeholder="Search Movie" class="search-input" id="movie-search" aria-label="Search movie input" required/>
+            <!--btn-->
+            <button type="submit" aria-label="Search">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
+
+        <!--Admin Panel Button------------->
+        <a href="admin.html" class="admin-panel-btn" aria-label="Admin Panel">
+            <i class="fas fa-user-shield"></i>
+            <span class="admin-btn-text">Admin</span>
+        </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </nav>
+    <!--nav-end-->
+    <!--==Latest-Movies==================================-->
+    <section id="latest" aria-label="Premium movies section">
+        <!--heading-------->
+        <div class="latest-heading">
+            <h1>Latest Movies</h1>
+        </div>
+        <!--container------->
+        <div class="post-container" id="movies-grid">
+            <!-- Movies will be loaded here -->
+        </div>
+    </section>
+    <!--latest-post-end------->
+
+    <!--==slider============================================-->
+    <section id="main-slider" aria-label="Movie carousel">
+        <!--heading-------->
+        <div class="latest-heading">
+            <h1>More Movies</h1>
+        </div>
+<!-- Swiper -->
+<div class="swiper mySwiper">
+    <div class="swiper-wrapper" id="swiper-wrapper">
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+  </div>
+  
+    </section>
+    <!--btns-------------------->
+    <div class="slider-btns">
+        <div class="swiper-button-prev" aria-label="Previous slide"></div>
+        <div class="swiper-button-next" aria-label="Next slide"></div>
+    </div>
+    <!--slider-end-------->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       
+    </section>
+    <!--latest-post-end------->
+    
+    <!--==Movie Request Section==================================-->
+    <section id="movie-request" aria-label="Request a movie section">
+        <div class="request-container">
+            <div class="request-heading">
+                <h2><i class="fas fa-film"></i> Request a Movie</h2>
+                <p>Tell us which movie you want to watch. We'll notify you when it's available!</p>
+            </div>
+            
+            <form class="movie-request-form" id="movie-request-form">
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <i class="fas fa-video input-icon"></i>
+                        <input 
+                            type="text" 
+                            id="requested-movie" 
+                            name="movie-name" 
+                            placeholder="Enter movie name (e.g., Avatar 2, Pathaan...)" 
+                            class="movie-input" 
+                            required
+                            aria-label="Movie name input"
+                        />
+                    </div>
+                    <button type="submit" class="submit-btn" aria-label="Submit movie request">
+                        <i class="fas fa-paper-plane"></i> Submit Request
+                    </button>
+                </div>
+                <div class="request-features">
+                    <div class="feature-item">
+                        <i class="fas fa-bell"></i>
+                        <span>Instant SMS Notification</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-clock"></i>
+                        <span>Quick Response Time</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Priority Processing</span>
+                    </div>
+                </div>
+            </form>
+            
+            <!-- Yes/No Question Modal -->
+            <div class="question-modal" id="question-modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Movie Request Confirmation</h3>
+                        <button class="close-modal" id="close-modal" aria-label="Close modal">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="movie-name-display" id="movie-name-display"></p>
+                        <p class="question-text">
+                            <span class="english">Do you want to watch this movie in theater?</span>
+                            <span class="hindi">क्या आप इस फिल्म को थिएटर में देखना चाहते हैं?</span>
+                        </p>
+                        <div class="button-group">
+                            <button class="answer-btn yes-btn" id="yes-btn" data-answer="yes">
+                                <i class="fas fa-check"></i> Yes / हाँ
+                            </button>
+                            <button class="answer-btn no-btn" id="no-btn" data-answer="no">
+                                <i class="fas fa-times"></i> No / नहीं
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Response Message -->
+            <div class="response-message" id="response-message">
+                <div class="response-content">
+                    <i class="fas fa-check-circle"></i>
+                    <p id="response-text"></p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!--==footer==============================-->
+    <footer role="contentinfo">
+        <!--footer-logo--->
+        <a href="index.html" class="logo">
+            Rajla Movies<span>.HD</span>
+        </a>
+        <!--copyright----->
+        <span class="copyright">
+            MADE BY GOURAV SHARMA
+        </span>
+    </footer>
+    <!--==Swiper JS CDN====================================-->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <!--==jQuery CDN=======================================-->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <!--==EmailJS SDK (Fallback for notifications)====================================-->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <!--==Firebase SDK====================================-->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <script>
+        // Firebase Configuration
+        // TODO: Replace with your Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyCAUuAaI0Ca9mIDrMeVG3zDIi-dg1svth8",
+            authDomain: "rajla-movies.firebaseapp.com",
+            databaseURL: "https://rajla-movies-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "rajla-movies",
+            storageBucket: "rajla-movies.firebasestorage.app",
+            messagingSenderId: "654783347546",
+            appId: "1:654783347546:web:bedd7e2a64302ea86d9163"
+        };
+        
+        // Initialize Firebase
+        let firebaseApp, database;
+        try {
+            firebaseApp = firebase.initializeApp(firebaseConfig);
+            database = firebase.database();
+        } catch(e) {
+            console.log('Firebase not configured. Using localStorage only.');
+        }
+        
+        // Movie Storage Manager - Syncs between Firebase and localStorage
+        const MovieStorage = {
+            // Save movies to both Firebase and localStorage
+            saveMovies: function(movies) {
+                // Save to localStorage (for offline access)
+                localStorage.setItem('adminMovies', JSON.stringify(movies));
+                
+                // Save to Firebase (for cross-device sync)
+                if (database) {
+                    database.ref('movies').set(movies)
+                        .then(() => {
+                            console.log('Movies saved to Firebase');
+                        })
+                        .catch((error) => {
+                            console.error('Error saving to Firebase:', error);
+                        });
+                }
+            },
+            
+            // Load movies from Firebase or localStorage
+            loadMovies: function(callback) {
+                if (database) {
+                    // Try to load from Firebase first
+                    database.ref('movies').once('value')
+                        .then((snapshot) => {
+                            const movies = snapshot.val();
+                            if (movies && Array.isArray(movies) && movies.length > 0) {
+                                // Save to localStorage for offline access
+                                localStorage.setItem('adminMovies', JSON.stringify(movies));
+                                callback(movies);
+                            } else {
+                                // Fallback to localStorage
+                                const localMovies = JSON.parse(localStorage.getItem('adminMovies') || '[]');
+                                callback(localMovies);
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Error loading from Firebase:', error);
+                            // Fallback to localStorage
+                            const localMovies = JSON.parse(localStorage.getItem('adminMovies') || '[]');
+                            callback(localMovies);
+                        });
+                } else {
+                    // Firebase not configured, use localStorage only
+                    const localMovies = JSON.parse(localStorage.getItem('adminMovies') || '[]');
+                    callback(localMovies);
+                }
+            },
+            
+            // Listen for real-time updates from Firebase
+            onMoviesChange: function(callback) {
+                if (database) {
+                    database.ref('movies').on('value', (snapshot) => {
+                        const movies = snapshot.val();
+                        if (movies && Array.isArray(movies)) {
+                            // Update localStorage
+                            localStorage.setItem('adminMovies', JSON.stringify(movies));
+                            callback(movies);
+                        }
+                    });
+                }
+            }
+        };
+        
+        // Request Storage Manager - Syncs between Firebase and localStorage
+        const RequestStorage = {
+            // Save requests to both Firebase and localStorage
+            saveRequests: function(requests) {
+                // Save to localStorage (for offline access)
+                localStorage.setItem('movieRequests', JSON.stringify(requests));
+                
+                // Save to Firebase (for cross-device sync)
+                if (database) {
+                    database.ref('movieRequests').set(requests)
+                        .then(() => {
+                            console.log('Requests saved to Firebase');
+                        })
+                        .catch((error) => {
+                            console.error('Error saving requests to Firebase:', error);
+                        });
+                }
+            },
+            
+            // Load requests from Firebase or localStorage
+            loadRequests: function(callback) {
+                // Always ensure callback is called
+                try {
+                    if (database) {
+                        // Set timeout to prevent hanging
+                        let callbackCalled = false;
+                        const timeout = setTimeout(() => {
+                            if (!callbackCalled) {
+                                callbackCalled = true;
+                                const localRequests = JSON.parse(localStorage.getItem('movieRequests') || '[]');
+                                callback(localRequests);
+                            }
+                        }, 2000); // 2 second timeout
+                        
+                        // Try to load from Firebase first
+                        database.ref('movieRequests').once('value')
+                            .then((snapshot) => {
+                                if (callbackCalled) return;
+                                clearTimeout(timeout);
+                                callbackCalled = true;
+                                
+                                const requests = snapshot.val();
+                                if (requests && Array.isArray(requests) && requests.length > 0) {
+                                    // Save to localStorage for offline access
+                                    localStorage.setItem('movieRequests', JSON.stringify(requests));
+                                    callback(requests);
+                                } else {
+                                    // Fallback to localStorage
+                                    const localRequests = JSON.parse(localStorage.getItem('movieRequests') || '[]');
+                                    callback(localRequests);
+                                }
+                            })
+                            .catch((error) => {
+                                if (callbackCalled) return;
+                                clearTimeout(timeout);
+                                callbackCalled = true;
+                                
+                                console.error('Error loading requests from Firebase:', error);
+                                // Fallback to localStorage
+                                const localRequests = JSON.parse(localStorage.getItem('movieRequests') || '[]');
+                                callback(localRequests);
+                            });
+                    } else {
+                        // Firebase not configured, use localStorage only
+                        const localRequests = JSON.parse(localStorage.getItem('movieRequests') || '[]');
+                        callback(localRequests);
+                    }
+                } catch(error) {
+                    console.error('Error in loadRequests:', error);
+                    // Fallback to localStorage
+                    const localRequests = JSON.parse(localStorage.getItem('movieRequests') || '[]');
+                    callback(localRequests);
+                }
+            },
+            
+            // Listen for real-time updates from Firebase
+            onRequestsChange: function(callback) {
+                if (database) {
+                    database.ref('movieRequests').on('value', (snapshot) => {
+                        const requests = snapshot.val();
+                        if (requests && Array.isArray(requests)) {
+                            // Update localStorage
+                            localStorage.setItem('movieRequests', JSON.stringify(requests));
+                            callback(requests);
+                        }
+                    });
+                }
+            }
+        };
+    </script>
+    <script>
+        /*==scroll-progress-bar======================*/
+        let scrollPrecentage = () =>{
+            let scrollProgress = document.getElementById("progress");
+            let progressValue = document.getElementById("progress-value");
+            let pos = document.documentElement.scrollTop;
+            let calcHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            let scrollValue = Math.round(pos * 100 / calcHeight);
+            scrollProgress.style.background = `conic-gradient(#e70634 ${scrollValue}%, #2b2f38 ${scrollValue}%)`;
+        }
+        window.onscroll = scrollPrecentage;
+        window.onload = scrollPrecentage;
+        /*Initialize Swiper*/
+        function initSwiper() {
+            if (document.querySelector('.mySwiper')) {
+                window.swiper = new Swiper(".mySwiper", {
+                    slidesPerView: 1,
+                    spaceBetween: 10,
+                    watchOverflow: true,
+                    observer: true,
+                    observeParents: true,
+                    loop: false,
+                    pagination: {
+                        el: ".swiper-pagination",
+                        clickable: true,
+                    },
+                    autoplay: {
+                        delay: 5000,
+                        disableOnInteraction: false,
+                        pauseOnMouseEnter: true,
+                    },
+                    navigation: {
+                        nextEl: ".swiper-button-next",
+                        prevEl: ".swiper-button-prev",
+                    },
+                    breakpoints: {
+                        320: {
+                            slidesPerView: 1,
+                            spaceBetween: 10,
+                        },
+                        480: {
+                            slidesPerView: 1,
+                            spaceBetween: 15,
+                        },
+                        640: {
+                            slidesPerView: 2,
+                            spaceBetween: 20,
+                        },
+                        768: {
+                            slidesPerView: 2,
+                            spaceBetween: 30,
+                        },
+                        1024: {
+                            slidesPerView: 3,
+                            spaceBetween: 50,
+                        },
+                    },
+                });
+            }
+        }
+        
+        // Initialize Swiper when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initSwiper);
+        } else {
+            initSwiper();
+        }
+        
+        /*==Default Movies (for first-time visitors)======================*/
+        function getDefaultMovies() {
+            return [
+                {
+                    id: 1001,
+                    title: "Bade Miyan Chote Miyan",
+                    year: "2024",
+                    image: "https://th.bing.com/th/id/OIP.LVT50G4EXx5qe7oHfI__xwAAAA?w=301&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+                    quality: "HD",
+                    category: "Action, Comedy, Thriller",
+                    duration: "2h 24mint",
+                    link: "https://linkmake.in/view/eMR2LCAos0",
+                    description: "Bollywood Hindi Full Movie PreDvD"
+                },
+                {
+                    id: 1002,
+                    title: "Maidaan",
+                    year: "2024",
+                    image: "https://th.bing.com/th/id/OIP.DNXJ2X6t47-z3z16Nao5yAHaFj?w=247&h=185&c=7&r=0&o=5&dpr=1.3&pid=1.76",
+                    quality: "HD",
+                    category: "Drama, History, Sport",
+                    duration: "2h 50mint",
+                    link: "https://linkmake.in/view/lXAnitEWDC",
+                    description: "Bollywood Hindi Movie HQCam"
+                },
+                {
+                    id: 1003,
+                    title: "Fighter",
+                    year: "2024",
+                    image: "https://pix1.wapkizfile.info/download/4358941605ba0c4a510ad685805d4f4e/filmy4wap+wapkiz+com/Fighter-2024-Bollywood-Hindi-Full-Movie-HD-ESub-(filmyfly.foo).jpg",
+                    quality: "Full HD",
+                    category: "Action, Drama, Thriller",
+                    duration: "2h 44mint",
+                    link: "https://linkmake.in/view/U3IJCg4EGQ",
+                    description: "Bollywood Hindi Full Movie HD ESub"
+                },
+                {
+                    id: 1004,
+                    title: "The Crew",
+                    year: "2024",
+                    image: "https://pix1.wapkizfile.info/download/b044b3e534b599385d9cecfee80949a3/filmy4wap+wapkiz+com/Crew-2024-Bollywood-Hindi-Movie-HD-ESub-(filmyfly.rsvp).jpg",
+                    quality: "Full HD",
+                    category: "Comedy, Drama",
+                    duration: "1h 50mint",
+                    link: "https://linkmake.in/view/2D1mYLGBIi",
+                    description: "Bollywood Hindi Movie"
+                },
+                {
+                    id: 1005,
+                    title: "YODHA",
+                    year: "2024",
+                    image: "https://i.ytimg.com/vi/0cLYUCB-CWo/maxresdefault.jpg",
+                    quality: "Full HD",
+                    category: "Action, Drama, Thriller",
+                    duration: "2h 10mint",
+                    link: "https://linkmake.in/view/3tD0lBVzfz",
+                    description: "Bollywood Hindi Movie"
+                },
+                {
+                    id: 1006,
+                    title: "Teri Baaton Mein Aisa Uljha Jiya",
+                    year: "2024",
+                    image: "https://th.bing.com/th/id/OIP.I4hWKyoRYZDlcFYvckr4uQHaJQ?w=146&h=183&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+                    quality: "Full HD",
+                    category: "Romance, Comedy",
+                    duration: "2h 21m",
+                    link: "https://linkmake.in/view/tmXHM2cEoZ",
+                    description: "Bollywood Hindi Movie"
+                },
+                {
+                    id: 1007,
+                    title: "RRR",
+                    year: "2022",
+                    image: "https://dl7.wapkizfile.info/download/16b7b6d23d32c9c446d28288f96de71e/filmy4wap+wapkiz+com/RRR-2022-New-South-Hindi-Dubbed-Full-Movie-HD-480p-720p-1080p-4k-(filmyfly.foo).jpg",
+                    quality: "Full HD",
+                    category: "Action, Drama",
+                    duration: "2h 30mint",
+                    link: "https://linkmake.in/view/rAttLYdE0l",
+                    description: "Bollywood Hindi Full Movie HD ESub"
+                },
+                {
+                    id: 1008,
+                    title: "Animal",
+                    year: "2023",
+                    image: "https://image.linkmake.in/images/files/b0a45dcfc631e88be751d114afb0d1bc745112.png",
+                    quality: "Full HD",
+                    category: "Action, Thriller",
+                    duration: "3h 21mint",
+                    link: "https://linkmake.in/view/ojbrzWTxCk",
+                    description: "Bollywood Hindi Full Movie HD"
+                },
+                {
+                    id: 1009,
+                    title: "Dunki",
+                    year: "2023",
+                    image: "https://pix1.wapkizfile.info/download/8fe0747e19d1a105e74a33d2752a8637/filmy4wap+wapkiz+com/Dunki-2023-Bollywood-Hindi-Full-Movie-HD-ESub-(filmyfly.foo).jpg",
+                    quality: "Full HD",
+                    category: "Crime, Drama",
+                    duration: "2h 40mint",
+                    link: "https://linkmake.in/view/blXlj4DEOL",
+                    description: "Bollywood Hindi Full Movie HD ESub"
+                },
+                {
+                    id: 1010,
+                    title: "Rocky Aur Rani Ki Prem Kahani",
+                    year: "2023",
+                    image: "https://pix1.wapkizfile.info/download/d4e53f713436f91bd0080dfeea8d9d2b/filmy4wap+wapkiz+com/Rocky-Aur-Rani-Ki-Prem-Kahani-2023-Bollywood-Hindi-Full-Movie-HD-ESub-(filmyfly.foo).jpg",
+                    quality: "Full HD",
+                    category: "Romance, Drama",
+                    duration: "2h 30mint",
+                    link: "https://linkmake.in/view/dbt9T0HLet",
+                    description: "Bollywood Hindi Full Movie HD ESub"
+                },
+                {
+                    id: 1011,
+                    title: "Shaitaan",
+                    year: "2023",
+                    image: "https://pix1.wapkizfile.info/download/3ab356bfd5db6a7e87243fd6cb110d13/filmy4wap+wapkiz+com/Shaitaan-2024-Bollywood-Hindi-Movie-HD-ESub-(filmyfly.rsvp).jpg",
+                    quality: "HQCam",
+                    category: "Horror, Thriller",
+                    duration: "1h 50mint",
+                    link: "https://linkmake.in/view/UD6t1baY1O",
+                    description: "Bollywood Hindi Movie"
+                },
+                {
+                    id: 1012,
+                    title: "Hi Papa (Hi Nanna)",
+                    year: "2023",
+                    image: "https://image.linkmake.in/images/files/9821fe44cdc9bdbaafc5088f448f323c125363.png",
+                    quality: "Full HD",
+                    category: "Comedy, Drama",
+                    duration: "2h 36mint",
+                    link: "https://linkmake.in/view/50JyA1DsY2",
+                    description: "Bollywood Hindi Movie"
+                }
+            ];
+        }
+        
+        /*==Load Admin Movies======================*/
+        function loadAdminMovies() {
+            const moviesGrid = document.getElementById('movies-grid');
+            const swiperWrapper = document.getElementById('swiper-wrapper');
+            
+            // Load movies from Firebase or localStorage
+            MovieStorage.loadMovies(function(adminMovies) {
+                // If no movies found, use default movies
+                if (adminMovies.length === 0) {
+                    adminMovies = getDefaultMovies();
+                }
+                
+                displayMovies(adminMovies, moviesGrid, swiperWrapper);
+            });
+            
+            // Listen for real-time updates from Firebase
+            MovieStorage.onMoviesChange(function(adminMovies) {
+                displayMovies(adminMovies, moviesGrid, swiperWrapper);
+            });
+        }
+        
+        // Function to display movies
+        function displayMovies(adminMovies, moviesGrid, swiperWrapper) {
+            if (!adminMovies || adminMovies.length === 0) {
+                if (moviesGrid) {
+                    moviesGrid.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-film"></i>
+                            <p>No movies available yet. Check back soon!</p>
+                        </div>
+                    `;
+                }
+                if (swiperWrapper) swiperWrapper.innerHTML = '';
+                return;
+            }
+            
+            // Sort movies by ID (newest first)
+            const sortedMovies = adminMovies.sort((a, b) => b.id - a.id);
+            
+            // Show first 12 movies in grid
+            const gridMovies = sortedMovies.slice(0, 12);
+            // Rest go to slider
+            const sliderMovies = sortedMovies.slice(12);
+            
+            // Function to create movie card HTML
+            function createMovieCard(movie, isGrid = false) {
+                const duration = movie.duration && movie.duration !== 'N/A' ? movie.duration : 'N/A';
+                
+                if (isGrid) {
+                    // Grid card format
+                    return `
+                        <div class="post-box" data-movie-id="${movie.id}">
+                            <div class="post-img">
+                                <a href="${movie.link}" class="main-slider-overlay" aria-label="Play ${movie.title}">
+                                    <i class="fas fa-play" aria-hidden="true"></i>
+                                </a>
+                                <img alt="${movie.title} (${movie.year}) movie poster" src="${movie.image}" onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'">
+                                <span class="quality">${movie.quality}</span>
+                            </div>
+                            <div class="post-info">
+                                <div class="movie-name">
+                                    <span>${movie.year}</span>
+                                    <a href="${movie.link}">${movie.title}</a>
+                                </div>
+                                <div class="category">${movie.category}</div>
+                                ${duration !== 'N/A' ? '<div class="duration">Duration: ' + duration + '</div>' : ''}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // Slider format
+                    return `
+                        <div class="swiper-slide" data-movie-id="${movie.id}">
+                            <div class="main-slider-box">
+                                <!--overlayer-------->
+                                <a href="${movie.link}" class="main-slider-overlay" aria-label="Play ${movie.title}">
+                                    <i class="fas fa-play" aria-hidden="true"></i>
+                                </a>
+                                <!--img----------->
+                                <div class="main-slider-img">
+                                    <img alt="${movie.title} (${movie.year}) movie poster" src="${movie.image}" onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'">
+                                </div>
+                                <!--text---------->
+                                <div class="main-slider-text">
+                                    <!--quality----->
+                                    <span class="quality">${movie.quality}</span>
+                                    <!--bottom-text-->
+                                    <div class="bottom-text">
+                                        <!--name----->
+                                        <div class="movie-name">
+                                            <span>${movie.year}</span>
+                                            <a href="${movie.link}">${movie.title} (${movie.year}) ${movie.description ? movie.description : ''}</a>
+                                        </div>
+                                        <!--Category-and-rating---->
+                                        <div class="category-rating">
+                                            <!--category-->
+                                            <div class="category">${movie.category}${duration !== 'N/A' ? '<br>Duration: ' + duration : ''}</div>
+                                            <!--rating--->
+                                            <div class="rating">
+                                                <img alt="imbd" src="Images/IMDb-icon.png"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+            
+            // Load grid movies
+            if (moviesGrid && gridMovies.length > 0) {
+                moviesGrid.innerHTML = gridMovies.map(movie => createMovieCard(movie, true)).join('');
+            } else if (moviesGrid) {
+                moviesGrid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-film"></i>
+                        <p>No movies available yet. Check back soon!</p>
+                    </div>
+                `;
+            }
+            
+            // Load slider movies
+            if (swiperWrapper && sliderMovies.length > 0) {
+                // Clear existing slides first (only admin-added movies)
+                const existingAdminSlides = swiperWrapper.querySelectorAll('[data-movie-id]');
+                existingAdminSlides.forEach(slide => slide.remove());
+                
+                sliderMovies.forEach(function(movie) {
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = createMovieCard(movie, false);
+                    const slideElement = tempDiv.firstElementChild;
+                    if (slideElement) {
+                        swiperWrapper.appendChild(slideElement);
+                    }
+                });
+                
+                // Show slider section
+                const sliderSection = document.getElementById('main-slider');
+                if (sliderSection) {
+                    sliderSection.style.display = 'block';
+                }
+                
+                // Update Swiper after adding movies
+                if (window.swiper) {
+                    setTimeout(function() {
+                        window.swiper.update();
+                        window.swiper.slideTo(0, 0); // Reset to first slide
+                    }, 300);
+                } else {
+                    // Initialize Swiper if not already initialized
+                    setTimeout(initSwiper, 300);
+                }
+            } else if (swiperWrapper && sliderMovies.length === 0) {
+                // Hide slider section if no slider movies
+                const sliderSection = document.getElementById('main-slider');
+                if (sliderSection) {
+                    sliderSection.style.display = 'none';
+                }
+            }
+        }
+        
+        // Load admin movies when page loads
+        function initializePage() {
+            // Initialize Swiper first
+            initSwiper();
+            // Then load movies
+            setTimeout(loadAdminMovies, 300);
+        }
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializePage);
+        } else {
+            initializePage();
+        }
+        
+        // Listen for storage changes to update movies in real-time
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'adminMovies') {
+                updateAdminMovies();
+            }
+        });
+        
+        // Listen for custom event (same tab updates)
+        window.addEventListener('adminMoviesUpdated', function() {
+            updateAdminMovies();
+        });
+        
+        // Function to update admin movies without full page reload
+        function updateAdminMovies() {
+            // Clear existing movies
+            const moviesGrid = document.getElementById('movies-grid');
+            const swiperWrapper = document.getElementById('swiper-wrapper');
+            
+            if (moviesGrid) {
+                moviesGrid.innerHTML = '';
+            }
+            if (swiperWrapper) {
+                swiperWrapper.innerHTML = '';
+            }
+            
+            // Reload all movies
+            loadAdminMovies();
+        }
+        
+        /*--menu-btn-fixed-when-scroll============*/
+        $(window).scroll(function(){
+            if($(document).scrollTop() > 20){
+                $('.navigation').addClass('fix-icon');
+            }
+            else{
+                $('.navigation').removeClass('fix-icon');
+            }
+        });
+        
+        /*==Scroll to top functionality============*/
+        const scrollToTopBtn = document.getElementById('scroll-to-top');
+        if (scrollToTopBtn) {
+            scrollToTopBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        }
+        
+        /*==Search functionality===================*/
+        // Simple Search Functionality
+        function initSearch() {
+            const searchInput = document.getElementById('movie-search');
+            const searchBox = document.querySelector('.search-box');
+            
+            if (!searchInput || !searchBox) {
+                return;
+            }
+            
+            // Function to get searchable text from a movie element
+            function getMovieSearchText(element) {
+                const movieName = element.querySelector('.movie-name a');
+                const movieYear = element.querySelector('.movie-name span');
+                const category = element.querySelector('.category');
+                const quality = element.querySelector('.quality');
+                
+                let searchText = '';
+                if (movieName) searchText += movieName.textContent.toLowerCase() + ' ';
+                if (movieYear) searchText += movieYear.textContent.toLowerCase() + ' ';
+                if (category) searchText += category.textContent.toLowerCase() + ' ';
+                if (quality) searchText += quality.textContent.toLowerCase() + ' ';
+                
+                return searchText.trim();
+            }
+            
+            // Function to perform search
+            function performSearch(searchTerm) {
+                const movieSlides = document.querySelectorAll('.swiper-slide');
+                const movieBoxes = document.querySelectorAll('.post-box');
+                const moviesGrid = document.getElementById('movies-grid');
+                const sliderSection = document.getElementById('main-slider');
+                
+                let foundCount = 0;
+                
+                // Search in slider movies
+                movieSlides.forEach(function(slide) {
+                    const searchText = getMovieSearchText(slide);
+                    if (searchText.includes(searchTerm)) {
+                        slide.style.display = '';
+                        foundCount++;
+                    } else {
+                        slide.style.display = 'none';
+                    }
+                });
+                
+                // Search in grid movies
+                movieBoxes.forEach(function(box) {
+                    const searchText = getMovieSearchText(box);
+                    if (searchText.includes(searchTerm)) {
+                        box.style.display = '';
+                        foundCount++;
+                    } else {
+                        box.style.display = 'none';
+                    }
+                });
+                
+                // Show "no results" message if nothing found
+                if (foundCount === 0) {
+                    if (moviesGrid && !moviesGrid.querySelector('.no-results')) {
+                        const noResults = document.createElement('div');
+                        noResults.className = 'no-results';
+                        noResults.innerHTML = `
+                            <i class="fas fa-search"></i>
+                            <h3>No movies found</h3>
+                            <p>Try searching with a different keyword</p>
+                        `;
+                        moviesGrid.appendChild(noResults);
+                    }
+                } else {
+                    const noResults = moviesGrid?.querySelector('.no-results');
+                    if (noResults) noResults.remove();
+                }
+                
+                // Update Swiper
+                if (typeof window.swiper !== 'undefined' && window.swiper) {
+                    setTimeout(() => window.swiper.update(), 100);
+                }
+            }
+        
+            // Function to reset search (show all movies)
+            function resetSearch() {
+                const movieSlides = document.querySelectorAll('.swiper-slide');
+                const movieBoxes = document.querySelectorAll('.post-box');
+                const moviesGrid = document.getElementById('movies-grid');
+                
+                movieSlides.forEach(function(slide) {
+                    slide.style.display = '';
+                });
+                
+                movieBoxes.forEach(function(box) {
+                    box.style.display = '';
+                });
+                
+                // Remove "no results" message
+                const noResults = moviesGrid?.querySelector('.no-results');
+                if (noResults) noResults.remove();
+                
+                // Update Swiper
+                if (typeof window.swiper !== 'undefined' && window.swiper) {
+                    setTimeout(() => window.swiper.update(), 100);
+                }
+            }
+            
+            // Form submit handler
+            searchBox.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                
+                if (searchTerm === '') {
+                    resetSearch();
+                } else {
+                    performSearch(searchTerm);
+                    // Scroll to results
+                    const moviesGrid = document.getElementById('movies-grid');
+                    if (moviesGrid) {
+                        moviesGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+            });
+            
+            // Real-time search as user types (optional)
+            let searchTimeout;
+            searchInput.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                const searchTerm = this.value.toLowerCase().trim();
+                
+                searchTimeout = setTimeout(() => {
+                    if (searchTerm === '') {
+                        resetSearch();
+                    } else {
+                        performSearch(searchTerm);
+                    }
+                }, 300); // Wait 300ms after user stops typing
+            });
+        }
+        
+        // Initialize search when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initSearch);
+        } else {
+            initSearch();
+        }
+        
+        /*==Movie Request Functionality===================*/
+        function initMovieRequest() {
+            const requestForm = document.getElementById('movie-request-form');
+            const questionModal = document.getElementById('question-modal');
+            const closeModal = document.getElementById('close-modal');
+            const yesBtn = document.getElementById('yes-btn');
+            const noBtn = document.getElementById('no-btn');
+            const responseMessage = document.getElementById('response-message');
+            const responseText = document.getElementById('response-text');
+            const movieNameDisplay = document.getElementById('movie-name-display');
+            const movieInput = document.getElementById('requested-movie');
+            
+            if (!requestForm) return;
+            
+            let currentMovieName = '';
+            
+            // Handle form submission
+            requestForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const movieName = movieInput.value.trim();
+                
+                if (movieName === '') {
+                    alert('Please enter a movie name');
+                    return;
+                }
+                
+                currentMovieName = movieName;
+                movieNameDisplay.textContent = movieName;
+                
+                // Hide response message if visible
+                responseMessage.classList.remove('show');
+                
+                // Show question modal
+                questionModal.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            });
+            
+            // Close modal
+            function closeQuestionModal() {
+                questionModal.classList.remove('show');
+                document.body.style.overflow = '';
+            }
+            
+            if (closeModal) {
+                closeModal.addEventListener('click', closeQuestionModal);
+            }
+            
+            // Close modal when clicking outside
+            if (questionModal) {
+                questionModal.addEventListener('click', function(e) {
+                    if (e.target === questionModal) {
+                        closeQuestionModal();
+                    }
+                });
+            }
+            
+            // Close modal on Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && questionModal && questionModal.classList.contains('show')) {
+                    closeQuestionModal();
+                }
+            });
+            
+            // Handle Yes button
+            if (yesBtn) {
+                yesBtn.addEventListener('click', function() {
+                    closeQuestionModal();
+                    saveMovieRequest(currentMovieName, 'yes', 1);
+                    showResponse('Request submitted successfully!', 'आपका अनुरोध सफलतापूर्वक जमा कर दिया गया है');
+                    movieInput.value = '';
+                });
+            }
+            
+            // Handle No button
+            if (noBtn) {
+                noBtn.addEventListener('click', function() {
+                    closeQuestionModal();
+                    saveMovieRequest(currentMovieName, 'no', 1);
+                    showResponse('Request submitted successfully!', 'आपका अनुरोध सफलतापूर्वक जमा कर दिया गया है');
+                    movieInput.value = '';
+                });
+            }
+            
+            // Save movie request to Firebase and localStorage
+            function saveMovieRequest(movieName, answer, days) {
+                try {
+                    // Load existing requests and add new one
+                    RequestStorage.loadRequests(function(requests) {
+                        const newRequest = {
+                            id: Date.now(),
+                            movieName: movieName,
+                            answer: answer,
+                            days: days,
+                            timestamp: new Date().toISOString(),
+                            status: 'pending'
+                        };
+                        requests.push(newRequest);
+                        // Save to Firebase and localStorage (syncs across all devices)
+                        RequestStorage.saveRequests(requests);
+                        
+                        // Send FREE email notification (can forward to SMS) - optional
+                        try {
+                            sendSMSNotification(newRequest);
+                        } catch (emailError) {
+                            console.log('Email notification optional - not configured or failed:', emailError);
+                        }
+                        
+                        // Trigger storage event for other tabs/pages
+                        window.dispatchEvent(new Event('storage'));
+                        window.dispatchEvent(new CustomEvent('movieRequestsUpdated'));
+                    });
+                } catch (error) {
+                    console.error('Error saving movie request:', error);
+                    // Still show success message even if save fails
+                }
+            }
+            
+            // 🆓 FREE: Send email notification when new request is submitted (can forward to SMS)
+            function sendSMSNotification(request) {
+                // FREE METHOD: EmailJS (200 emails/month free)
+                // Email can be forwarded to SMS via your email provider
+                sendEmailNotification(request);
+            }
+            
+            // 🆓 FREE: Send email notification via EmailJS (can be forwarded to SMS)
+            function sendEmailNotification(request) {
+                // ============================================
+                // 🆓 FREE SETUP: EmailJS (200 emails/month free)
+                // ============================================
+                // Step 1: Sign up at https://www.emailjs.com/ (FREE)
+                // Step 2: Create email service (Gmail, Outlook, etc.)
+                // Step 3: Create email template
+                // Step 4: Get your credentials and update below
+                // Step 5: Forward email to SMS (see FREE_SETUP.md)
+                
+                const EMAILJS_SERVICE_ID = 'service_ep81smh'; // TODO: Get from EmailJS dashboard
+                const EMAILJS_TEMPLATE_ID = 'template_4fraob7'; // TODO: Get from EmailJS dashboard
+                const EMAILJS_PUBLIC_KEY = 'HJpACSoHTu8lwwOax'; // TODO: Get from EmailJS dashboard
+                const ADMIN_EMAIL = 'gourav10062007@gmail.com'; // TODO: Your email address
+                
+                // Check if EmailJS is configured (skip if using placeholder values)
+                const isConfigured = EMAILJS_SERVICE_ID && 
+                                   EMAILJS_TEMPLATE_ID && 
+                                   EMAILJS_PUBLIC_KEY &&
+                                   EMAILJS_SERVICE_ID !== 'service_ep81smh' && 
+                                   EMAILJS_TEMPLATE_ID !== 'template_4fraob7' && 
+                                   EMAILJS_PUBLIC_KEY !== 'HJpACSoHTu8lwwOax';
+                
+                if (!isConfigured) {
+                    console.log('📧 EmailJS not configured. Request saved locally. See FREE_SETUP.md for email notifications.');
+                    return;
+                }
+                
+                // Send email via EmailJS (FREE - 200 emails/month)
+                if (typeof emailjs !== 'undefined') {
+                    const formattedDate = new Date(request.timestamp).toLocaleString('en-IN', {
+                        timeZone: 'Asia/Kolkata',
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    
+                    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+                        movie_name: request.movieName,
+                        theater_preference: request.answer === 'yes' ? 'Yes / हाँ (Theater)' : 'No / नहीं (Online)',
+                        upload_days: request.days,
+                        timestamp: formattedDate,
+                        to_email: ADMIN_EMAIL,
+                        message: `🎬 New Movie Request!\n\n📽️ Movie: ${request.movieName}\n🎭 Theater: ${request.answer === 'yes' ? 'Yes / हाँ' : 'No / नहीं'}\n⏰ Upload: ${request.days} day(s)\n📅 Time: ${formattedDate}\n\nRajla Movies.HD`
+                    }, EMAILJS_PUBLIC_KEY)
+                    .then(() => {
+                        console.log('✅ Email notification sent successfully!');
+                    })
+                    .catch((error) => {
+                        console.log('⚠️ Email notification failed (optional feature):', error.message);
+                        // Don't show error to user - email is optional
+                    });
+                } else {
+                    console.log('📧 EmailJS library not loaded. Email notifications disabled.');
+                }
+            }
+            
+            // Show response message
+            function showResponse(englishText, hindiText) {
+                responseText.innerHTML = `
+                    <span class="english-text">${englishText}</span>
+                    <span class="hindi-text">${hindiText}</span>
+                `;
+                responseMessage.classList.add('show');
+                
+                // Scroll to response message
+                setTimeout(function() {
+                    responseMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 100);
+                
+                // Hide response after 5 seconds
+                setTimeout(function() {
+                    responseMessage.classList.remove('show');
+                }, 5000);
+            }
+            
+            // Close response message on click
+            responseMessage.addEventListener('click', function() {
+                responseMessage.classList.remove('show');
+            });
+        }
+        
+        // Initialize movie request when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initMovieRequest);
+        } else {
+            initMovieRequest();
+        }
+      </script>
+</body>
+</html>
+  
+  

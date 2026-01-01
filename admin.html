@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Rajla Movies.HD</title>
+    
+    <!--==Font Awesome CDN==========================-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!--Stylesheet(CSS)==========================-->
+    <link rel="stylesheet" href="style.css"/>
+    <link rel="stylesheet" href="admin.css"/>
+    
+    <!--==Fav-icon===============================-->
+    <link rel="shortcut icon" href="Images/fav-icon.png" type="image/png"/>
+    
+    <!--==Firebase SDK====================================-->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <script>
+        // Firebase Configuration
+        // TODO: Replace with your Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyCAUuAaI0Ca9mIDrMeVG3zDIi-dg1svth8",
+            authDomain: "rajla-movies.firebaseapp.com",
+            databaseURL: "https://rajla-movies-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "rajla-movies",
+            storageBucket: "rajla-movies.firebasestorage.app",
+            messagingSenderId: "654783347546",
+            appId: "1:654783347546:web:bedd7e2a64302ea86d9163"
+        };
+        
+        // Initialize Firebase
+        let firebaseApp, database;
+        try {
+            firebaseApp = firebase.initializeApp(firebaseConfig);
+            database = firebase.database();
+        } catch(e) {
+            console.log('Firebase not configured. Using localStorage only.');
+        }
+        
+        // Movie Storage Manager - Syncs between Firebase and localStorage
+        const MovieStorage = {
+            // Save movies to both Firebase and localStorage
+            saveMovies: function(movies) {
+                // Save to localStorage (for offline access)
+                localStorage.setItem('adminMovies', JSON.stringify(movies));
+                
+                // Save to Firebase (for cross-device sync)
+                if (database) {
+                    database.ref('movies').set(movies)
+                        .then(() => {
+                            console.log('Movies saved to Firebase');
+                        })
+                        .catch((error) => {
+                            console.error('Error saving to Firebase:', error);
+                        });
+                }
+            },
+            
+            // Load movies from Firebase or localStorage
+            loadMovies: function(callback) {
+                // Always ensure callback is called
+                try {
+                    if (database) {
+                        // Set timeout to prevent hanging
+                        let callbackCalled = false;
+                        const timeout = setTimeout(() => {
+                            if (!callbackCalled) {
+                                callbackCalled = true;
+                                const localMovies = JSON.parse(localStorage.getItem('adminMovies') || '[]');
+                                callback(localMovies);
+                            }
+                        }, 2000); // 2 second timeout
+                        
+                        // Try to load from Firebase first
+                        database.ref('movies').once('value')
+                            .then((snapshot) => {
+                                if (callbackCalled) return;
+                                clearTimeout(timeout);
+                                callbackCalled = true;
+                                
+                                const movies = snapshot.val();
+                                if (movies && Array.isArray(movies) && movies.length > 0) {
+                                    // Save to localStorage for offline access
+                                    localStorage.setItem('adminMovies', JSON.stringify(movies));
+                                    callback(movies);
+                                } else {
+                                    // Fallback to localStorage
+                                    const localMovies = JSON.parse(localStorage.getItem('adminMovies') || '[]');
+                                    callback(localMovies);
+                                }
+                            })
+                            .catch((error) => {
+                                if (callbackCalled) return;
+                                clearTimeout(timeout);
+                                callbackCalled = true;
+                                
+                                console.error('Error loading from Firebase:', error);
+                                // Fallback to localStorage
+                                const localMovies = JSON.parse(localStorage.getItem('adminMovies') || '[]');
+                                callback(localMovies);
+                            });
+                    } else {
+                        // Firebase not configured, use localStorage only
+                        const localMovies = JSON.parse(localStorage.getItem('adminMovies') || '[]');
+                        callback(localMovies);
+                    }
+                } catch(error) {
+                    console.error('Error in loadMovies:', error);
+                    // Fallback to localStorage
+                    const localMovies = JSON.parse(localStorage.getItem('adminMovies') || '[]');
+                    callback(localMovies);
+                }
+            },
+            
+            // Listen for real-time updates from Firebase
+            onMoviesChange: function(callback) {
+                if (database) {
+                    database.ref('movies').on('value', (snapshot) => {
+                        const movies = snapshot.val();
+                        if (movies && Array.isArray(movies)) {
+                            // Update localStorage
+                            localStorage.setItem('adminMovies', JSON.stringify(movies));
+                            callback(movies);
+                        }
+                    });
+                }
+            }
+        };
+        
+        // Request Storage Manager - Syncs between Firebase and localStorage
+        const RequestStorage = {
+            // Save requests to both Firebase and localStorage
+            saveRequests: function(requests) {
+                // Save to localStorage (for offline access)
+                localStorage.setItem('movieRequests', JSON.stringify(requests));
+                
+                // Save to Firebase (for cross-device sync)
+                if (database) {
+                    database.ref('movieRequests').set(requests)
+                        .then(() => {
+                            console.log('Requests saved to Firebase');
+                        })
+                        .catch((error) => {
+                            console.error('Error saving requests to Firebase:', error);
+                        });
+                }
+            },
+            
+            // Load requests from Firebase or localStorage
+            loadRequests: function(callback) {
+                // Always ensure callback is called
+                try {
+                    if (database) {
+                        // Set timeout to prevent hanging
+                        let callbackCalled = false;
+                        const timeout = setTimeout(() => {
+                            if (!callbackCalled) {
+                                callbackCalled = true;
+                                const localRequests = JSON.parse(localStorage.getItem('movieRequests') || '[]');
+                                callback(localRequests);
+                            }
+                        }, 2000); // 2 second timeout
+                        
+                        // Try to load from Firebase first
+                        database.ref('movieRequests').once('value')
+                            .then((snapshot) => {
+                                if (callbackCalled) return;
+                                clearTimeout(timeout);
+                                callbackCalled = true;
+                                
+                                const requests = snapshot.val();
+                                if (requests && Array.isArray(requests) && requests.length > 0) {
+                                    // Save to localStorage for offline access
+                                    localStorage.setItem('movieRequests', JSON.stringify(requests));
+                                    callback(requests);
+                                } else {
+                                    // Fallback to localStorage
+                                    const localRequests = JSON.parse(localStorage.getItem('movieRequests') || '[]');
+                                    callback(localRequests);
+                                }
+                            })
+                            .catch((error) => {
+                                if (callbackCalled) return;
+                                clearTimeout(timeout);
+                                callbackCalled = true;
+                                
+                                console.error('Error loading requests from Firebase:', error);
+                                // Fallback to localStorage
+                                const localRequests = JSON.parse(localStorage.getItem('movieRequests') || '[]');
+                                callback(localRequests);
+                            });
+                    } else {
+                        // Firebase not configured, use localStorage only
+                        const localRequests = JSON.parse(localStorage.getItem('movieRequests') || '[]');
+                        callback(localRequests);
+                    }
+                } catch(error) {
+                    console.error('Error in loadRequests:', error);
+                    // Fallback to localStorage
+                    const localRequests = JSON.parse(localStorage.getItem('movieRequests') || '[]');
+                    callback(localRequests);
+                }
+            },
+            
+            // Listen for real-time updates from Firebase
+            onRequestsChange: function(callback) {
+                if (database) {
+                    database.ref('movieRequests').on('value', (snapshot) => {
+                        const requests = snapshot.val();
+                        if (requests && Array.isArray(requests)) {
+                            // Update localStorage
+                            localStorage.setItem('movieRequests', JSON.stringify(requests));
+                            callback(requests);
+                        }
+                    });
+                }
+            }
+        };
+    </script>
+</head>
+<body>
+    <!--==Login Page==============================-->
+    <div id="login-page" class="login-page">
+        <div class="login-container">
+            <div class="login-box">
+                <div class="login-header">
+                    <i class="fas fa-user-shield"></i>
+                    <h1>Admin Login</h1>
+                    <p>Rajla Movies.HD Admin Panel</p>
+                </div>
+                <form id="login-form" class="login-form">
+                    <div class="form-group">
+                        <label for="admin-username">
+                            <i class="fas fa-user"></i> Username
+                        </label>
+                        <input type="text" id="admin-username" name="username" placeholder="Enter username" required autocomplete="username"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="admin-password">
+                            <i class="fas fa-lock"></i> Password
+                        </label>
+                        <input type="password" id="admin-password" name="password" placeholder="Enter password" required autocomplete="current-password"/>
+                    </div>
+                    <button type="submit" class="login-btn">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </button>
+                    <div class="login-info">
+                        
+                        <a href="index.html" class="back-link">
+                            <i class="fas fa-arrow-left"></i> Back to Home
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!--==Admin Dashboard==========================-->
+    <div id="admin-dashboard" class="admin-dashboard" style="display: none;">
+        <!-- Header -->
+        <header class="admin-header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <a href="index.html" class="admin-logo">
+                        <i class="fas fa-film"></i> Rajla Movies<span>.HD</span>
+                    </a>
+                </div>
+                <div class="header-actions">
+                    <span class="admin-welcome">
+                        <i class="fas fa-user-circle"></i> Welcome, Admin
+                    </span>
+                    <button id="logout-btn" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Sidebar -->
+            <aside class="admin-sidebar">
+                <nav class="sidebar-nav">
+                    <a href="#movies" class="nav-item active" data-section="movies">
+                        <i class="fas fa-video"></i> Movies
+                    </a>
+                    <a href="#requests" class="nav-item" data-section="requests">
+                        <i class="fas fa-bell"></i> Requests
+                        <span class="badge" id="request-badge">0</span>
+                    </a>
+                </nav>
+            </aside>
+
+            <!-- Content Area -->
+            <div class="admin-content">
+                <!-- Movies Section -->
+                <section id="movies-section" class="content-section active">
+                    <div class="section-header">
+                        <h2><i class="fas fa-video"></i> Movie Management</h2>
+                        <button class="add-movie-btn" id="add-movie-btn">
+                            <i class="fas fa-plus"></i> Add New Movie
+                        </button>
+                    </div>
+
+                    <!-- Add Movie Form -->
+                    <div class="add-movie-form" id="add-movie-form" style="display: none;">
+                        <h3>Add New Movie</h3>
+                        <form id="movie-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="movie-title">Movie Title *</label>
+                                    <input type="text" id="movie-title" name="title" placeholder="Enter movie title" required/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="movie-year">Year *</label>
+                                    <input type="number" id="movie-year" name="year" placeholder="2024" min="1900" max="2100" required/>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="movie-image">Image URL *</label>
+                                    <input type="url" id="movie-image" name="image" placeholder="https://example.com/image.jpg" required/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="movie-quality">Quality *</label>
+                                    <select id="movie-quality" name="quality" required>
+                                        <option value="HD">HD</option>
+                                        <option value="Full HD">Full HD</option>
+                                        <option value="HQCam">HQCam</option>
+                                        <option value="PreDvD">PreDvD</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="movie-category">Category/Genre *</label>
+                                    <input type="text" id="movie-category" name="category" placeholder="Action, Comedy, Thriller" required/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="movie-duration">Duration</label>
+                                    <input type="text" id="movie-duration" name="duration" placeholder="2h 24mint"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="movie-link">Watch Link *</label>
+                                <input type="url" id="movie-link" name="link" placeholder="https://linkmake.in/view/..." required/>
+                            </div>
+                            <div class="form-group">
+                                <label for="movie-description">Description</label>
+                                <textarea id="movie-description" name="description" rows="3" placeholder="Movie description (optional)"></textarea>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="submit-btn">
+                                    <i class="fas fa-save"></i> Add Movie
+                                </button>
+                                <button type="button" class="cancel-btn" id="cancel-add-btn">
+                                    <i class="fas fa-times"></i> Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Movies List -->
+                    <div class="movies-list" id="movies-list">
+                        <div class="loading-message">
+                            <i class="fas fa-spinner fa-spin"></i> Loading movies...
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Requests Section -->
+                <section id="requests-section" class="content-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-bell"></i> Movie Requests</h2>
+                        <button class="refresh-btn" id="refresh-requests">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+
+                    <div class="requests-list" id="requests-list">
+                        <div class="loading-message">
+                            <i class="fas fa-spinner fa-spin"></i> Loading requests...
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Initialize Admin Panel
+        function initAdminPanel() {
+            // Check if already logged in
+            const isLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
+            if (isLoggedIn) {
+                showDashboard();
+            } else {
+                showLogin();
+            }
+
+            // Initialize default admin credentials if not set
+            if (!localStorage.getItem('adminCredentials')) {
+                localStorage.setItem('adminCredentials', JSON.stringify({
+                    username: 'admin',
+                    password: 'gs8103'
+                }));
+            }
+
+            // Login form handler
+            const loginForm = document.getElementById('login-form');
+            if (loginForm) {
+                loginForm.addEventListener('submit', handleLogin);
+            }
+
+            // Logout handler
+            const logoutBtn = document.getElementById('logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', handleLogout);
+            }
+
+            // Navigation handlers
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const section = this.getAttribute('data-section');
+                    switchSection(section);
+                });
+            });
+
+            // Add movie button
+            const addMovieBtn = document.getElementById('add-movie-btn');
+            const addMovieForm = document.getElementById('add-movie-form');
+            const cancelAddBtn = document.getElementById('cancel-add-btn');
+            
+            if (addMovieBtn) {
+                addMovieBtn.addEventListener('click', function() {
+                    addMovieForm.style.display = addMovieForm.style.display === 'none' ? 'block' : 'none';
+                });
+            }
+
+            if (cancelAddBtn) {
+                cancelAddBtn.addEventListener('click', function() {
+                    addMovieForm.style.display = 'none';
+                    document.getElementById('movie-form').reset();
+                });
+            }
+
+            // Movie form handler
+            const movieForm = document.getElementById('movie-form');
+            if (movieForm) {
+                movieForm.addEventListener('submit', handleAddMovie);
+            }
+
+            // Refresh requests
+            const refreshBtn = document.getElementById('refresh-requests');
+            if (refreshBtn) {
+                refreshBtn.addEventListener('click', loadRequests);
+            }
+        }
+
+        function showLogin() {
+            document.getElementById('login-page').style.display = 'flex';
+            document.getElementById('admin-dashboard').style.display = 'none';
+        }
+
+        function showDashboard() {
+            document.getElementById('login-page').style.display = 'none';
+            document.getElementById('admin-dashboard').style.display = 'block';
+            loadMovies();
+            loadRequests();
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('admin-username').value.trim();
+            const password = document.getElementById('admin-password').value;
+            
+            if (!username || !password) {
+                alert('Please enter both username and password');
+                return;
+            }
+            
+            try {
+                const credentials = JSON.parse(localStorage.getItem('adminCredentials'));
+
+                if (username === credentials.username && password === credentials.password) {
+                    localStorage.setItem('adminLoggedIn', 'true');
+                    showDashboard();
+                } else {
+                    alert('Invalid username or password!');
+                    // Clear password field on error
+                    document.getElementById('admin-password').value = '';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                alert('Error during login. Please try again.');
+            }
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.setItem('adminLoggedIn', 'false');
+                showLogin();
+                document.getElementById('login-form').reset();
+            }
+        }
+
+        function switchSection(section) {
+            // Update nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`[data-section="${section}"]`).classList.add('active');
+
+            // Update content sections
+            document.querySelectorAll('.content-section').forEach(sec => {
+                sec.classList.remove('active');
+            });
+            document.getElementById(`${section}-section`).classList.add('active');
+
+            // Load data for active section
+            if (section === 'movies') {
+                loadMovies();
+            } else if (section === 'requests') {
+                loadRequests();
+            }
+        }
+
+        function handleAddMovie(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            
+            // Validate required fields
+            const title = formData.get('title')?.trim();
+            const year = formData.get('year')?.trim();
+            const image = formData.get('image')?.trim();
+            const link = formData.get('link')?.trim();
+            
+            if (!title || !year || !image || !link) {
+                alert('Please fill in all required fields (Title, Year, Image URL, and Watch Link)');
+                return;
+            }
+            
+            // Validate URL format
+            try {
+                new URL(image);
+                new URL(link);
+            } catch (error) {
+                alert('Please enter valid URLs for Image and Watch Link');
+                return;
+            }
+            
+            const movie = {
+                id: Date.now(),
+                title: title,
+                year: year,
+                image: image,
+                quality: formData.get('quality') || 'HD',
+                category: formData.get('category')?.trim() || 'Action, Drama',
+                duration: formData.get('duration')?.trim() || 'N/A',
+                link: link,
+                description: formData.get('description')?.trim() || ''
+            };
+
+            // Show loading state
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding...';
+
+            // Load existing movies and add new one
+            try {
+                MovieStorage.loadMovies(function(movies) {
+                    movies.push(movie);
+                    // Save to Firebase and localStorage (syncs across all devices)
+                    MovieStorage.saveMovies(movies);
+                    
+                    // Trigger storage event for other tabs/pages
+                    window.dispatchEvent(new Event('storage'));
+                    window.dispatchEvent(new CustomEvent('adminMoviesUpdated'));
+
+                    alert('Movie added successfully! It will appear on all devices.');
+                    e.target.reset();
+                    document.getElementById('add-movie-form').style.display = 'none';
+                    loadMovies();
+                    
+                    // Reset button
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                });
+            } catch (error) {
+                console.error('Error adding movie:', error);
+                alert('Error adding movie. Please try again.');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
+        }
+
+        function loadMovies() {
+            const moviesList = document.getElementById('movies-list');
+            
+            if (!moviesList) {
+                console.error('Movies list element not found');
+                return;
+            }
+            
+            // Show loading state
+            moviesList.innerHTML = `
+                <div class="loading-state">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading movies...</p>
+                </div>
+            `;
+            
+            // Function to display movies
+            function displayMovies(movies) {
+                if (!movies || movies.length === 0) {
+                    moviesList.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-film"></i>
+                            <p>No movies added yet. Click "Add New Movie" to get started.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Sort by ID (newest first)
+                const sortedMovies = movies.sort((a, b) => b.id - a.id);
+                
+                moviesList.innerHTML = sortedMovies.map(movie => `
+                    <div class="movie-card" data-id="${movie.id}">
+                        <div class="movie-card-image">
+                            <img src="${movie.image}" alt="${movie.title}" onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'"/>
+                            <span class="quality-badge">${movie.quality || 'HD'}</span>
+                        </div>
+                        <div class="movie-card-info">
+                            <h3>${movie.title || 'Untitled'}</h3>
+                            <p class="movie-year">${movie.year || 'N/A'}</p>
+                            <p class="movie-category">${movie.category || 'N/A'}</p>
+                            <p class="movie-duration">Duration: ${movie.duration || 'N/A'}</p>
+                            <div class="movie-actions">
+                                <a href="${movie.link}" target="_blank" class="view-btn" rel="noopener noreferrer">
+                                    <i class="fas fa-external-link-alt"></i> View Link
+                                </a>
+                                <button class="delete-btn" onclick="deleteMovie(${movie.id})" aria-label="Delete ${movie.title}">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            // Load from Firebase or localStorage
+            try {
+                MovieStorage.loadMovies(function(movies) {
+                    displayMovies(movies);
+                });
+            } catch(error) {
+                console.error('Error loading movies:', error);
+                // Fallback to localStorage only
+                const localMovies = JSON.parse(localStorage.getItem('adminMovies') || '[]');
+                displayMovies(localMovies);
+            }
+            
+            // Listen for real-time updates from Firebase
+            try {
+                MovieStorage.onMoviesChange(function(movies) {
+                    displayMovies(movies);
+                });
+            } catch(error) {
+                console.error('Error setting up real-time listener:', error);
+            }
+        }
+
+        function deleteMovie(id) {
+            if (confirm('Are you sure you want to delete this movie? This action cannot be undone.')) {
+                try {
+                    // Load movies from Firebase or localStorage
+                    MovieStorage.loadMovies(function(movies) {
+                        const filtered = movies.filter(m => m.id !== id);
+                        // Save to Firebase and localStorage (syncs across all devices)
+                        MovieStorage.saveMovies(filtered);
+                        
+                        // Trigger storage event for other tabs/pages
+                        window.dispatchEvent(new Event('storage'));
+                        window.dispatchEvent(new CustomEvent('adminMoviesUpdated'));
+                        
+                        loadMovies();
+                        alert('Movie deleted successfully! It will be removed from all devices.');
+                    });
+                } catch (error) {
+                    console.error('Error deleting movie:', error);
+                    alert('Error deleting movie. Please try again.');
+                }
+            }
+        }
+
+        function loadRequests() {
+            const requestsList = document.getElementById('requests-list');
+            const badge = document.getElementById('request-badge');
+            
+            // Show loading state
+            requestsList.innerHTML = `
+                <div class="loading-state">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading requests...</p>
+                </div>
+            `;
+            
+            // Function to display requests
+            function displayRequests(requests) {
+                // Update badge
+                const pendingCount = requests.filter(r => r.status === 'pending').length;
+                badge.textContent = pendingCount;
+                badge.style.display = pendingCount > 0 ? 'inline-block' : 'none';
+
+                if (requests.length === 0) {
+                    requestsList.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-bell-slash"></i>
+                            <p>No movie requests yet.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Sort by newest first
+                const sortedRequests = requests.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+                requestsList.innerHTML = sortedRequests.map(request => {
+                    const date = new Date(request.timestamp);
+                    const formattedDate = date.toLocaleString();
+                    const statusClass = request.status === 'pending' ? 'pending' : 'completed';
+                    
+                    return `
+                        <div class="request-card ${statusClass}" data-id="${request.id}">
+                            <div class="request-header">
+                                <div class="request-title">
+                                    <i class="fas fa-film"></i>
+                                    <h3>${request.movieName}</h3>
+                                </div>
+                                <span class="request-status ${statusClass}">${request.status}</span>
+                            </div>
+                            <div class="request-details">
+                                <p><i class="fas fa-calendar"></i> <strong>Requested:</strong> ${formattedDate}</p>
+                                <p><i class="fas fa-theater-masks"></i> <strong>Theater:</strong> ${request.answer === 'yes' ? 'Yes / हाँ' : 'No / नहीं'}</p>
+                                <p><i class="fas fa-clock"></i> <strong>Upload Time:</strong> ${request.days} day${request.days > 1 ? 's' : ''}</p>
+                            </div>
+                            <div class="request-actions">
+                                ${request.status === 'pending' ? `
+                                    <button class="mark-complete-btn" onclick="markRequestComplete(${request.id})">
+                                        <i class="fas fa-check"></i> Mark as Complete
+                                    </button>
+                                ` : ''}
+                                <button class="delete-request-btn" onclick="deleteRequest(${request.id})">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            // Load from Firebase or localStorage
+            try {
+                RequestStorage.loadRequests(function(requests) {
+                    displayRequests(requests);
+                });
+            } catch(error) {
+                console.error('Error loading requests:', error);
+                // Fallback to localStorage only
+                const localRequests = JSON.parse(localStorage.getItem('movieRequests') || '[]');
+                displayRequests(localRequests);
+            }
+            
+            // Listen for real-time updates from Firebase
+            try {
+                RequestStorage.onRequestsChange(function(requests) {
+                    displayRequests(requests);
+                });
+            } catch(error) {
+                console.error('Error setting up real-time listener:', error);
+            }
+        }
+
+        function markRequestComplete(id) {
+            // Load requests from Firebase or localStorage
+            RequestStorage.loadRequests(function(requests) {
+                const updated = requests.map(r => r.id === id ? {...r, status: 'completed'} : r);
+                // Save to Firebase and localStorage (syncs across all devices)
+                RequestStorage.saveRequests(updated);
+                
+                // Trigger storage event for other tabs/pages
+                window.dispatchEvent(new Event('storage'));
+                window.dispatchEvent(new CustomEvent('movieRequestsUpdated'));
+                
+                loadRequests();
+                alert('Request marked as complete! It will be updated on all devices.');
+            });
+        }
+
+        function deleteRequest(id) {
+            if (confirm('Are you sure you want to delete this request?')) {
+                // Load requests from Firebase or localStorage
+                RequestStorage.loadRequests(function(requests) {
+                    const filtered = requests.filter(r => r.id !== id);
+                    // Save to Firebase and localStorage (syncs across all devices)
+                    RequestStorage.saveRequests(filtered);
+                    
+                    // Trigger storage event for other tabs/pages
+                    window.dispatchEvent(new Event('storage'));
+                    window.dispatchEvent(new CustomEvent('movieRequestsUpdated'));
+                    
+                    loadRequests();
+                    alert('Request deleted successfully! It will be removed from all devices.');
+                });
+            }
+        }
+
+        // Initialize on page load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initAdminPanel);
+        } else {
+            initAdminPanel();
+        }
+    </script>
+</body>
+</html>
+
